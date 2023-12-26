@@ -15,7 +15,7 @@ def concatenate_files(source_repo, output_file):
                 if file in excluded_files:
                     continue
 
-                if file.endswith('.js') or file.endswith('.ts') or file.endswith('.jsx') or file.endswith('.tsx') or file.endswith('.json'):
+                if file.endswith('.js') or file.endswith('.ts') or file.endswith('.json'):
                     # Skip files within excluded directories
                     if any(excluded_folder in root for excluded_folder in excluded_folders):
                         continue
@@ -34,7 +34,7 @@ def concatenate_files(source_repo, output_file):
                         output.write(contents + "\n\n")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Concatenate the contents of .json, .js, .ts, .jsx and .tsx files from a repository into a single text file with headers for each file’s relative path')
+    parser = argparse.ArgumentParser(description='Concatenate the contents of .json, .js, .ts files from a repository into a single text file with headers for each file’s relative path')
     parser.add_argument('source_repo', type=str, help='Path to the source repository')
     parser.add_argument('output_file', type=str, help='Path to the output text file')
 
