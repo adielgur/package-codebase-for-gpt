@@ -34,7 +34,7 @@ def concatenate_files(source_repo, output_folder):
 
                 source_file = os.path.join(root, file)
                 relative_path = os.path.relpath(source_file, source_repo)
-                print(f"Processing: {relative_path}")
+                print(f"{relative_path}")
 
                 output.write(f"---\nFile: {relative_path}\n---\n")
 

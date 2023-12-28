@@ -18,7 +18,7 @@ def concatenate_files(source_repo, output_file):
                     source_file = os.path.join(root, file)
                     # Get the relative path of the file from the source_repo
                     relative_path = os.path.relpath(source_file, source_repo)
-                    print(f"Processing: {relative_path}")
+                    print(f"{relative_path}")
 
                     # Write the relative file path as header
                     output.write(f"---\nFile: {relative_path}\n---\n")
