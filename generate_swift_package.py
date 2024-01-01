@@ -2,7 +2,8 @@ import os
 import argparse
 
 def concatenate_files(source_repo, output_file):
-    excluded_folders = {'Pods', 'Frameworks'}
+    excluded_folders = {'Pods', 'Frameworks', '.bundle', 'libraries'}
+    accept_folders = { 'fastlane' }
 
     with open(output_file, 'w') as output:
         for root, dirs, files in os.walk(source_repo, topdown=True):
@@ -10,7 +11,7 @@ def concatenate_files(source_repo, output_file):
             dirs[:] = [d for d in dirs if not d.endswith('.framework') and d not in excluded_folders]
 
             for file in files:
-                if file.endswith('.swift') or file.endswith('.m') or file.endswith('.h') or file.endswith('.mm') or file.endswith('.c') or file.endswith('.cpp'):
+                if file.endswith('.swift') or file.endswith('.m') or file.endswith('.h') or file.endswith('.mm') or file.endswith('.c') or file.endswith('.cpp') or any(accept_folder in root for accept_folder in accept_folders):
                     # Skip files within excluded directories
                     if any(excluded_folder in root for excluded_folder in excluded_folders):
                         continue
