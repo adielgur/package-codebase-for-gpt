@@ -2,7 +2,7 @@ import os
 import argparse
 
 def concatenate_files(source_repo, output_file):
-    excluded_folders = {'libraries'}
+    excluded_folders = {'libraries', 'venv'}
 
     with open(output_file, 'w') as output:
         for root, dirs, files in os.walk(source_repo, topdown=True):

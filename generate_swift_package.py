@@ -2,7 +2,7 @@ import os
 import argparse
 
 def concatenate_files(source_repo, output_file):
-    excluded_folders = {'Pods', 'Frameworks', '.bundle', 'libraries'}
+    excluded_folders = {'Pods', 'Frameworks', '.bundle', 'libraries', 'scripts'}
     accept_folders = { 'fastlane' }
 
     with open(output_file, 'w') as output:
