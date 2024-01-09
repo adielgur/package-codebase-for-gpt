@@ -3,6 +3,8 @@ import argparse
 
 def concatenate_files(source_repo, output_file):
     excluded_folders = {'node_modules', 'public'}
+    excluded_files = {'package-lock.json'}  # Set of excluded files
+
 
     with open(output_file, 'w') as output:
         for root, dirs, files in os.walk(source_repo, topdown=True):
@@ -10,7 +12,10 @@ def concatenate_files(source_repo, output_file):
             dirs[:] = [d for d in dirs if d not in excluded_folders]
 
             for file in files:
-                if file.endswith('.js') or file.endswith('.ts') or file.endswith('.dockerfile'):
+                if file in excluded_files:
+                    continue
+
+                if file.endswith('.js') or file.endswith('.ts') or file.endswith('.dockerfile') or file.endswith('.json') :
                     # Skip files within excluded directories
                     if any(excluded_folder in root for excluded_folder in excluded_folders):
                         continue
