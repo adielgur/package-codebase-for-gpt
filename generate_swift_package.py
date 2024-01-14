@@ -1,17 +1,21 @@
 import os
 import argparse
+import utils
 
 def concatenate_files(source_repo, output_file):
-    excluded_folders = {'Pods', 'Frameworks', '.bundle', 'libraries', 'scripts'}
-    accept_folders = { 'fastlane' }
+    excluded_folders = {'Pods', 'Frameworks', 'opencv2.framework', '.bundle', 'libraries', 'scripts', '.git'}
+    included_extensions = {'.swift', '.m', '.h', '.mm', '.c', '.cpp'}  # Set of included files
 
     with open(output_file, 'w') as output:
+        structure = utils.generate_file_structure(source_repo, excluded_folders, {}, included_extensions)
+        output.write(f"Codebase Structure:\n{structure}\n\n")
+
         for root, dirs, files in os.walk(source_repo, topdown=True):
              # Skip directories ending with .framework and specified excluded folders
             dirs[:] = [d for d in dirs if not d.endswith('.framework') and d not in excluded_folders]
 
             for file in files:
-                if file.endswith('.swift') or file.endswith('.m') or file.endswith('.h') or file.endswith('.mm') or file.endswith('.c') or file.endswith('.cpp') or any(accept_folder in root for accept_folder in accept_folders):
+                if any(file.endswith(ext) for ext in included_extensions):
                     # Skip files within excluded directories
                     if any(excluded_folder in root for excluded_folder in excluded_folders):
                         continue
@@ -22,7 +26,7 @@ def concatenate_files(source_repo, output_file):
                     print(f"{relative_path}")
 
                     # Write the relative file path as header
-                    output.write(f"---\nFile: {relative_path}\n---\n")
+                    output.write(f"File: {relative_path}\n\n")
 
                     # Write contents of the file
                     with open(source_file, 'r') as f:
