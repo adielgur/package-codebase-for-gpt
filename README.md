@@ -16,7 +16,7 @@ For instance-
 When interpreting the 'codebase.txt' document,  
 I recognize the structure-
 Codebase Structure: <**codebase directory and file tree**>
-File: <**filepath**> as the header for each file within the codebase, followed by the contents of that file.  
+File: <**file path**> as the header for each file within the codebase, followed by the contents of that file.  
 This enables me to provide context-specific advice based on the specific files and code segments referenced in the document.  
 This is the file list:   
 <**output from running the python script**>
