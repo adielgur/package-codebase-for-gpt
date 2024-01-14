@@ -3,7 +3,7 @@ import argparse
 import utils
 
 def concatenate_files(source_repo, output_file):
-    excluded_folders = {'node_modules', 'public'}
+    excluded_folders = {'node_modules', 'public', '.git'}
     excluded_files = {'package-lock.json'}  # Set of excluded files
     included_extensions = {'.js', '.ts', '.dockerfile', '.json'}  # Set of included files
 
@@ -11,7 +11,7 @@ def concatenate_files(source_repo, output_file):
     with open(output_file, 'w') as output:
         structure = utils.generate_file_structure(source_repo, excluded_folders, excluded_files, included_extensions)
         output.write(f"Codebase Structure:\n{structure}\n\n")
-        
+
         for root, dirs, files in os.walk(source_repo, topdown=True):
              # Skip directories ending with .framework and specified excluded folders
             dirs[:] = [d for d in dirs if d not in excluded_folders]

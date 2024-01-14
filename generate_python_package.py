@@ -3,13 +3,13 @@ import argparse
 import utils
 
 def concatenate_files(source_repo, output_file):
-    excluded_folders = {'libraries', 'venv'}
+    excluded_folders = {'libraries', 'venv', '.git'}
     included_extensions = {'.py'}  # Set of included files
 
     with open(output_file, 'w') as output:
         structure = utils.generate_file_structure(source_repo, excluded_folders, {}, included_extensions)
         output.write(f"Codebase Structure:\n{structure}\n\n")
-        
+
         for root, dirs, files in os.walk(source_repo, topdown=True):
              # Skip directories ending with .framework and specified excluded folders
             dirs[:] = [d for d in dirs if d not in excluded_folders]

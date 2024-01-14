@@ -4,7 +4,7 @@ import os
 
 def is_text_file(filename):
     # List of textual file extensions
-    text_extensions = ['.txt', '.py', '.js', '.json', '.ts', '.jsx', '.tsx' '.cpp', '.h', '.hpp', '.swift']
+    text_extensions = ['.txt', '.py', '.js', '.json', '.ts', '.jsx', '.tsx', '.cpp', '.h', '.hpp', '.swift']
     return any(filename.endswith(ext) for ext in text_extensions)
 
 def get_changed_files(target_branch, source_branch):
@@ -14,34 +14,31 @@ def get_changed_files(target_branch, source_branch):
     # Filter out non-textual files
     return [f for f in changed_files if is_text_file(f)]
 
-def get_file_content(branch, file):
+def get_file_diff(target_branch, source_branch, file):
     try:
-        return subprocess.check_output(["git", "show", f"{branch}:{file}"]).decode()
+        # Using git diff to get differences for each file
+        diff = subprocess.check_output(
+            ["git", "diff", f"{target_branch}...{source_branch}", "--", file]).decode()
+        return diff
     except subprocess.CalledProcessError:
-        return None
+        return "Error getting diff."
+
+def print_modified_files(file_list):
+    print("Modified Files:")
+    for file in file_list:
+        print(file)
+    print("\n")
 
 def write_file_contents(file_list, target_branch, source_branch, output_file):
     with open(output_file, 'w') as output:
         for file in file_list:
             # Write file header
             relative_path = os.path.relpath(file)
-            output.write(f"---\nFile: {relative_path}\n---\n")
+            output.write(f"File: {relative_path}\n\n")
 
-            # Write 'before' content
-            before_content = get_file_content(target_branch, file)
-            output.write("### Before\n")
-            if before_content is not None:
-                output.write(before_content + "\n")
-            else:
-                output.write("FILE NOT PRESENT IN THIS BRANCH\n\n")
-
-            # Write 'after' content
-            after_content = get_file_content(source_branch, file)
-            output.write("### After\n")
-            if after_content is not None:
-                output.write(after_content + "\n")
-            else:
-                output.write("FILE REMOVED FROM THIS BRANCH\n\n")
+            # Write file diff
+            file_diff = get_file_diff(target_branch, source_branch, file)
+            output.write(file_diff + "\n")
 
 def main():
     parser = argparse.ArgumentParser(description="Compare files in two Git branches.")
@@ -57,6 +54,9 @@ def main():
 
     # Get list of changed files
     changed_files = get_changed_files(args.target_branch, args.source_branch)
+
+    # Print modified files
+    print_modified_files(changed_files)
 
     # Write file contents
     write_file_contents(changed_files, args.target_branch, args.source_branch, args.output_file)
