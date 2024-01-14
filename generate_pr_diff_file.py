@@ -10,7 +10,7 @@ def is_text_file(filename):
 def get_changed_files(target_branch, source_branch):
     # Get a list of changed files between the target branch and the source branch
     changed_files = subprocess.check_output(
-        ["git", "diff", "--name-only", f"{target_branch}...{source_branch}"]).decode().splitlines()
+        ["git", "diff", "--name-only", "--diff-filter=AM", f"{target_branch}...{source_branch}"]).decode().splitlines()
     # Filter out non-textual files
     return [f for f in changed_files if is_text_file(f)]
 
